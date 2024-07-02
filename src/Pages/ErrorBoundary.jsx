@@ -20,7 +20,7 @@ componentDidCatch(error,info){
 }
   render() {
    if(this.state.hasError){
-    return <h1>Something went Wrong ...</h1>
+    return <h1 style={{textAlign:"center"}}>Something went Wrong ...</h1>
    }
    return this.props.children
   }

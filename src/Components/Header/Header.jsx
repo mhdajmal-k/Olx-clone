@@ -11,31 +11,24 @@ import { failed, success } from "../../helpers/toastify";
 import { ToastContainer } from "react-toastify";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firbase/config";
-import { useNavigate,NavLink } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 function Header() {
-  const { user } = useContext(AuthContext);
-  const navigate=useNavigate()
-  // useEffect(()=>{
-    
-  //   user ? success(`Welcome ${user.displayName}`) : success("Welcome");
-  // },[])
-  const Out=async ()=>{
-    try {
-      
-      await signOut(auth)
-        success("singOut successfully")
-        console.log("singOuted successfully");
-        setTimeout(()=>{
 
-          navigate("login")
-        },2000)
-      
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const Out = async () => {
+    try {
+      await signOut(auth);
+      success("singOut successfully");
+      console.log("singOuted successfully");
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
     } catch (error) {
-      failed(error.message)
+      failed(error.message);
     }
-  }
+  };
   return (
-  
     <div className="headerParentDiv">
       <div className="headerChildDiv">
         <div className="brandName">
@@ -62,32 +55,32 @@ function Header() {
         ) : (
           <div className="loginPage">
             <NavLink to={"/login"}>
-
-            <span >Login</span>
+              <span>Login</span>
             </NavLink>
             <hr />
           </div>
         )}
-        {user&&<div >
-        <button className="logOut" onClick={Out}>Log out</button>
-        </div>}
-        
+        {user && (
+          <div>
+            <button className="logOut" onClick={Out}>
+              Log out
+            </button>
+          </div>
+        )}
 
         <div className="sellMenu">
           <SellButton></SellButton>
           <div className="sellMenuContent">
             <SellButtonPlus></SellButtonPlus>
             <NavLink to={"/create"}>
-
-            <span>SELL</span>
+              <span>SELL</span>
             </NavLink>
           </div>
         </div>
       </div>
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 }
 
-export default React.memo(Header)
-
+export default React.memo(Header);

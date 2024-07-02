@@ -28,7 +28,6 @@ function Posts() {
         });
 
         setProduct(allData);
-        console.log(allData);
       } catch (error) {
         console.log(error.message);
         alert(error.message);
@@ -38,6 +37,12 @@ function Posts() {
     };
     fetchData();
   }, [firestore]);
+
+ 
+  const sortedProducts = product
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .slice(0, 4);
+
   return (
     <div className="postParentDiv">
       <div className="moreView">
@@ -45,9 +50,9 @@ function Posts() {
           <span>Quick Menu</span>
           <span>View more</span>
         </div>
-{loading?(
+        {loading ? (
           <Shimmer />
-        ):product.length>0?((
+        ) : product.length > 0 ? (
           <div className="cards">
             {product.map((productData, id) => {
               return (
@@ -68,41 +73,51 @@ function Posts() {
                   <div className="content">
                     <p className="rate">Price:&#x20B9; {productData?.Price}</p>
                     <span className="kilometer">
-                      Category:{productData?.category}
+                      Category:{productData?.category.toUpperCase()}
                     </span>
-                    <p className="name">Product: {productData?.product}</p>
-
+                    <p className="name">
+                      Product: {productData?.product.toUpperCase()}
+                    </p>
                     <span>{productData?.createdAt}</span>
                   </div>
                 </div>
               );
             })}
           </div>
-        )):(<p>No product Listed</p>) }
-
+        ) : (
+          <p>No product Listed</p>
+        )}
       </div>
       <div className="recommendations">
         <div className="heading">
           <span>Fresh recommendations</span>
         </div>
-        <div className="cards">
-          <div className="card">
-            <div className="favorite">
-              <Heart></Heart>
-            </div>
-            <div className="image">
-              <img src="../../../Images/R15V3.jpg" alt="" />
-            </div>
-            <div className="content">
-              <p className="rate">&#x20B9; 250000</p>
-              <span className="kilometer">Two Wheeler</span>
-              <p className="name"> YAMAHA R15V3</p>
-            </div>
-            <div className="date">
-              <span>10/5/2021</span>
-            </div>
+        {sortedProducts.length > 0 ? (
+          <div className="cards">
+            {sortedProducts.map((data, index) => {
+              return (
+                <div className="card" key={index}>
+                  <div className="favorite">
+                    <Heart></Heart>
+                  </div>
+                  <div className="image">
+                    <img src={data?.url} alt="loading" />
+                  </div>
+                  <div className="content">
+                    <p className="rate">&#x20B9;{data?.Price}</p>
+                    <span className="kilometer">{data?.category.toUpperCase()}</span>
+                    <p className="name"> {data?.product.toUpperCase()}</p>
+                  </div>
+                  <div className="date">
+                    <span>{data?.createdAt}</span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
-        </div>
+        ) : (
+          <p>No recommendations available</p>
+        )}
       </div>
     </div>
   );

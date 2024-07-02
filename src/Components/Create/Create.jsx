@@ -1,43 +1,54 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useReducer, useState } from "react";
 import "./Create.css";
 import Header from "../Header/Header";
 import { FirebaseContext, AuthContext } from "../../Store/context";
 import firebase from "firebase/compat/app";
 import Loading from "../Loading/Loading";
-import {
-  getDownloadURL,
-  ref as storageRef,
-  uploadBytes,
-} from "firebase/storage";
+import { getDownloadURL, ref as storageRef, uploadBytes,} from "firebase/storage";
 import { doc, setDoc, collection, addDoc } from "firebase/firestore";
 import { failed, success } from "../../helpers/toastify";
 import { useNavigate } from "react-router-dom";
-
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "Name":
+      return {
+        ...state,
+        Name: action.payload,
+      };
+    case "category":
+      return {
+        ...state,
+        category: action.payload,
+      };
+    case "Price":
+      return {
+        ...state,
+        Price: action.payload,
+      };
+    default:
+      return state;
+  }
+};
 const Create = () => {
-  const [data, setFormData] = useState({
+  const [data, dispatch] = useReducer(reducer, {
     Name: "",
     category: "",
     Price: "",
   });
+ 
+
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const nav = useNavigate();
   const { Firebase, storage, firestore } = useContext(FirebaseContext);
   const { user } = useContext(AuthContext);
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...data,
-      [name]: value,
-    });
-  };
   const date = new Date();
   async function handleSubmit(e) {
-    if (data.Name.trim()=="") {
+    if (data.Name.trim() == "") {
       failed("product name is required");
       return;
     }
-    if (data.Price.trim()=="") {
+    if (data.Price.trim() == "") {
       if (data.Price < 0) {
         failed("invalid price");
       } else if (data.Price > 1000000) {
@@ -45,7 +56,7 @@ const Create = () => {
       }
       return;
     }
-    if (data.category.trim()=="") {
+    if (data.category.trim() == "") {
       failed("product category is required");
       return;
     }
@@ -59,7 +70,7 @@ const Create = () => {
         Price: data.Price,
         category: data.category,
         url: url,
-        userId: user.uid, 
+        userId: user.uid,
         createdAt: date.toDateString(),
       });
       success("record saved successfully");
@@ -88,7 +99,9 @@ const Create = () => {
                 id="fname"
                 name="Name"
                 value={data.Name}
-                onChange={handleChange}
+                onChange={(e) => {
+                  dispatch({ type: "Name", payload: e.target.value });
+                }}
               />
               <br />
               <label htmlFor="fname">Category</label>
@@ -99,7 +112,9 @@ const Create = () => {
                 id="fname"
                 name="category"
                 value={data.category}
-                onChange={handleChange}
+                onChange={(e) => {
+                  dispatch({ type: "category", payload: e.target.value });
+                }}
               />
               <br />
               <label htmlFor="fname">Price</label>
@@ -110,7 +125,9 @@ const Create = () => {
                 id="fname"
                 name="Price"
                 value={data.Price}
-                onChange={handleChange}
+                onChange={(e) => {
+                  dispatch({ type: "Price", payload: e.target.value });
+                }}
               />
               <br />
 
@@ -124,7 +141,7 @@ const Create = () => {
 
               <br />
               <input
-                type="file" 
+                type="file"
                 onChange={(e) => {
                   setImage(e.target.files[0]);
                 }}

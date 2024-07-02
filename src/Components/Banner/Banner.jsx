@@ -3,6 +3,7 @@ import React from 'react';
 import './Banner.css';
 import Arrow from '../../assets/Arrow'
 function Banner() {
+  console.log("it from banner")
   return (
     <div className="bannerParentDiv">
       <div className="bannerChildDiv">
@@ -33,4 +34,4 @@ function Banner() {
   );
 }
 
-export default Banner;
+export default React.memo(Banner)

@@ -57,7 +57,7 @@ function Login() {
       ) : (
         <div className="loginParentDiv">
           <img
-            style={{ width: "150px", height: "200px", paddingRight: "100px" }}
+            style={{ width: "150px", height: "200px", paddingRight: "100px",paddingLeft:"100px" }}
             src={Logo}
           ></img>
           <form onSubmit={handleSubmit}>

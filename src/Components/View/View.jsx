@@ -43,8 +43,8 @@ function View() {
         {user && (
           <div className="contactDetails">
             <p>Seller details</p>
-            <p>{user?.username}</p>
-            <p>{user?.email}</p>
+            <p>{user?.username.toUpperCase()}</p>
+            <p>{user?.email.toUpperCase()}</p>
             <p>{user?.phone}</p>
           </div>
         )}
