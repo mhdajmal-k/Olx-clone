@@ -79,6 +79,7 @@ function Posts() {
                       Product: {productData?.product.toUpperCase()}
                     </p>
                     <span>{productData?.createdAt}</span>
+                    <p>description:{productData?.description}</p>
                   </div>
                 </div>
               );

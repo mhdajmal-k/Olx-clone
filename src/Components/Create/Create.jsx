@@ -25,6 +25,11 @@ const reducer = (state, action) => {
         ...state,
         Price: action.payload,
       };
+      case "description":
+        return{
+          ...state,
+          description:action.payload
+        }
     default:
       return state;
   }
@@ -34,6 +39,7 @@ const Create = () => {
     Name: "",
     category: "",
     Price: "",
+    description:""
   });
  
 
@@ -60,6 +66,11 @@ const Create = () => {
       failed("product category is required");
       return;
     }
+    if(data.description.trim()==""){
+      failed("dscrption is required");
+      return;
+
+    }
     setLoading(true);
     try {
       const imageRef = storageRef(storage, `/image${image.name}`);
@@ -72,6 +83,7 @@ const Create = () => {
         url: url,
         userId: user.uid,
         createdAt: date.toDateString(),
+        description:data.description
       });
       success("record saved successfully");
       nav("/");
@@ -130,7 +142,18 @@ const Create = () => {
                 }}
               />
               <br />
-
+              <label>
+              description 
+              </label>
+                <input className="input"
+                type="text"
+                id='fname'
+                name="dec"
+                value={data.description}
+                onChange={(e)=>{
+                  dispatch({type:"description",payload:e.target.value})
+                }}
+                />
               <br />
               <img
                 alt="Posts"
