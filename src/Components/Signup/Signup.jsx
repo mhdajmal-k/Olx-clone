@@ -54,6 +54,7 @@ export default function Signup() {
     }
     setLoading(true)
     try {
+      console.log("error from here ")
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         formData.email,
@@ -62,6 +63,7 @@ export default function Signup() {
       if (userCredential) {
         success("success");
         const user = userCredential.user;
+        console.log("expecting Error")
         await updateProfile(user, { displayName: formData.Username });
         await setDoc(doc(collection(firestore, "users"), user.uid), {
           username: formData.Username,
@@ -105,7 +107,7 @@ export default function Signup() {
           <input
             className="input"
             type="email"
-            id="fname"
+            id="email"
             name="email"
             value={formData.email}
             onChange={handleChange}
@@ -116,7 +118,7 @@ export default function Signup() {
           <input
             className="input"
             type="number"
-            id="lname"
+            id="number"
             name="phone"
             value={formData.phone}
             onChange={handleChange}
@@ -127,9 +129,10 @@ export default function Signup() {
           <input
             className="input"
             type="password"
-            id="lname"
+            id="password"
             name="password"
             value={formData.password}
+            autoComplete=""
             onChange={handleChange}
           />
           <br />
